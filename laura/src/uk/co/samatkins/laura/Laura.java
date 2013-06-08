@@ -69,21 +69,20 @@ public class Laura {
 		});
 		
 		if (pluginFiles.length == 0) {
-			print("ERROR: No modules found!");
-			return;
+			print("ERROR: No modules were loaded! LAURA will have no functionality!");
+			exit();
 		}
 		
-		URLClassLoader classLoader;// = new URLClassLoader(new URL[]{pluginsDir.toURI().toURL()});
-
 		// Iterate through .jar files
+		URLClassLoader classLoader;
 		JarFile jarFile;
 		for (File plugin: pluginFiles) {
 			try {
 				classLoader = new URLClassLoader(new URL[]{plugin.toURI().toURL()});
 				jarFile = new JarFile(plugin);
-			} catch (IOException e1) {
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				e.printStackTrace();
 				continue;
 			}
 			
@@ -108,7 +107,7 @@ public class Laura {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (ClassCastException e) {
-						
+						// Class isn't a module. No need to panic.
 					} catch (IllegalAccessException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

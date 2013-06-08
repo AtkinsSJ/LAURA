@@ -14,7 +14,7 @@ public class ExitModule implements Module {
 	@Override
 	public void init(Laura laura) {
 		this.laura = laura;
-		Pattern pattern = Pattern.compile("exit|quit", Pattern.CASE_INSENSITIVE);
+		Pattern pattern = Pattern.compile("exit|quit|bye|goodbye", Pattern.CASE_INSENSITIVE);
 		matcher = pattern.matcher("");
 	}
 

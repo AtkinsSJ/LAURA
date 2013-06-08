@@ -55,28 +55,15 @@ public class DefineModule implements Module {
 					"false", //useCanonical, 
 					"false" //includeTags
 			);
+			
+			for (Definition def: definitions) {
+				laura.print(query + ": (" + def.getPartOfSpeech() + ")");
+				laura.print(def.getText());
+			}
 		} catch (ApiException e) {
-			// TODO Auto-generated catch block
+			laura.print("Sorry, but I could not contact the definition server.");
 			e.printStackTrace();
 		}
-		
-//		
-//		// Ask wordnik for the definition
-//		try {
-//			URL wordnikUrl = new URL("http://api.wordnik.com/v4/word.json/"
-//					+ query + "/definitions?api_key=" + API_KEY + "&limit=1");
-//			HttpURLConnection conn = (HttpURLConnection) wordnikUrl.openConnection();
-//			conn.connect();
-//			
-//			String jsonString = new BufferedReader(new InputStreamReader(conn.getInputStream())).readLine();
-//			
-//		} catch (MalformedURLException e) {
-//			laura.print("Sorry, I could not reach the wordnik server to get the definition.");
-//			return;
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		
 	}
 

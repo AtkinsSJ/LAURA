@@ -48,8 +48,6 @@ public class Laura {
 					break;
 				}
 			}
-			
-			print("Sorry, I do not understand how to " + input);
 		}
 	}
 	
@@ -147,6 +145,11 @@ public class Laura {
 		}
 		
 		print("Successfully loaded " + modules.size() + " modules");
+		
+		// Add the DefaultModule last - it simply says the command was not understood.
+		Module defaultModule = new DefaultModule();
+		defaultModule.init(this);
+		modules.add(defaultModule);
 	}
 
 	public void exit() {

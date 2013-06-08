@@ -27,13 +27,14 @@ public class Laura {
 	public void start() {
 		print("Waking LAURA...");
 		createUserDir();
-		try {
-			loadPlugins();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		loadPlugins();
 		print("LAURA is awake!");
+		
+		mainLoop();
+	}
+	
+	public void mainLoop() {
+		
 	}
 	
 	/**
@@ -50,7 +51,7 @@ public class Laura {
 		}
 	}
 	
-	private void loadPlugins() throws IOException {
+	private void loadPlugins()  {
 		print("Loading modules");
 		
 		File pluginsDir = new File(homeDir, "plugins");
@@ -77,8 +78,14 @@ public class Laura {
 		// Iterate through .jar files
 		JarFile jarFile;
 		for (File plugin: pluginFiles) {
-			classLoader = new URLClassLoader(new URL[]{plugin.toURI().toURL()});
-			jarFile = new JarFile(plugin);
+			try {
+				classLoader = new URLClassLoader(new URL[]{plugin.toURI().toURL()});
+				jarFile = new JarFile(plugin);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				continue;
+			}
 			
 			// Search through the JAR for class files
 			Enumeration<JarEntry> entries = jarFile.entries();
@@ -92,7 +99,7 @@ public class Laura {
 							true, classLoader
 						);
 						Module m = (Module)c.newInstance();
-						m.init();
+						m.init(this);
 						modules.add(m);
 					} catch (ClassNotFoundException e) {
 						// TODO Auto-generated catch block
@@ -111,6 +118,11 @@ public class Laura {
 		}
 		
 		print("Successfully loaded " + modules.size() + " modules");
+	}
+
+	public void exit() {
+		print("Going to sleep.");
+		System.exit(0);
 	}
 
 }

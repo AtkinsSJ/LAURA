@@ -35,17 +35,21 @@ public class Laura {
 	}
 	
 	public void mainLoop() {
-		String[] input;
+		String input;
+		String[] inputParts;
 		while (true) {
-			input = getInput().split(" ");
+			input = getInput();
+			inputParts = input.split(" ");
 			
 			// Try each module in turn
 			for (Module module: modules) {
-				if (module.matches(input)) {
-					module.execute(input);
+				if (module.matches(inputParts)) {
+					module.execute(inputParts);
 					break;
 				}
 			}
+			
+			print("Sorry, I do not understand how to " + input);
 		}
 	}
 	
@@ -146,7 +150,7 @@ public class Laura {
 	}
 
 	public void exit() {
-		print("Going to sleep.");
+		print("Goodbye!");
 		System.exit(0);
 	}
 

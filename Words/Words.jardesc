@@ -11,9 +11,10 @@
         </sealing>
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <file path="/Words/pom.xml"/>
         <file path="/Words/.project"/>
         <file path="/Words/.classpath"/>
         <javaElement handleIdentifier="=Words/src"/>
-        <folder path="/Words/lib"/>
+        <folder path="/Words/bin"/>
     </selectedElements>
 </jardesc>

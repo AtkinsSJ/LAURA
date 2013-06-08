@@ -1,19 +1,15 @@
 package uk.co.samatkins.laura.plugins;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Map;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import uk.co.samatkins.laura.Laura;
 import uk.co.samatkins.laura.Module;
+
+import com.wordnik.client.api.WordApi;
+import com.wordnik.client.common.ApiException;
+import com.wordnik.client.model.Definition;
 
 public class DefineModule implements Module {
 
@@ -21,15 +17,11 @@ public class DefineModule implements Module {
 	private Matcher matcher;
 	private String API_KEY = "612cdc57340323631f3010ea81408e2ed10a5c239cc6116df";
 	
-	private ObjectMapper mapper;
-	
 	@Override
 	public void init(Laura laura) {
 		this.laura = laura;
 		Pattern pattern = Pattern.compile("define", Pattern.CASE_INSENSITIVE);
 		matcher = pattern.matcher("");
-		
-		mapper = new ObjectMapper();
 	}
 
 	@Override
@@ -51,26 +43,41 @@ public class DefineModule implements Module {
 		}
 		String query = sb.toString();
 		
-		// Ask wordnik for the definition
+		WordApi api = new WordApi();
+		api.getInvoker().addDefaultHeader("api_key", API_KEY);
 		try {
-			URL wordnikUrl = new URL("http://api.wordnik.com/v4/word.json/"
-					+ query + "/definitions?api_key=" + API_KEY + "&limit=1");
-			HttpURLConnection conn = (HttpURLConnection) wordnikUrl.openConnection();
-			conn.connect();
-			
-			String jsonString = new BufferedReader(new InputStreamReader(conn.getInputStream())).readLine();
-			
-			Map<String,Object> json = mapper.readValue(jsonString, Map.class);
-			
-			laura.print(json.toString());
-			
-		} catch (MalformedURLException e) {
-			laura.print("Sorry, I could not reach the wordnik server to get the definition.");
-			return;
-		} catch (IOException e) {
+			List<Definition> definitions = api.getDefinitions(
+					query,
+					null, //partOfSpeech, 
+					null, //sourceDictionaries, 
+					3, //limit, 
+					"false", //includeRelated, 
+					"false", //useCanonical, 
+					"false" //includeTags
+			);
+		} catch (ApiException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+//		
+//		// Ask wordnik for the definition
+//		try {
+//			URL wordnikUrl = new URL("http://api.wordnik.com/v4/word.json/"
+//					+ query + "/definitions?api_key=" + API_KEY + "&limit=1");
+//			HttpURLConnection conn = (HttpURLConnection) wordnikUrl.openConnection();
+//			conn.connect();
+//			
+//			String jsonString = new BufferedReader(new InputStreamReader(conn.getInputStream())).readLine();
+//			
+//		} catch (MalformedURLException e) {
+//			laura.print("Sorry, I could not reach the wordnik server to get the definition.");
+//			return;
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
 	}
 
 }

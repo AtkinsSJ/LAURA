@@ -2,6 +2,9 @@ package uk.co.samatkins.laura;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,6 +12,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.InvalidPropertiesFormatException;
+import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -17,6 +22,9 @@ public class Laura {
 	private BufferedReader lineInput;
 	
 	private File homeDir;
+	private File preferencesFile;
+	
+	private Properties preferences;
 	
 	private ArrayList<Module> modules;
 
@@ -28,6 +36,7 @@ public class Laura {
 	public void start() {
 		print("Waking LAURA...");
 		createUserDir();
+		loadPreferences();
 		loadPlugins();
 		print("LAURA is awake!");
 		
@@ -77,6 +86,43 @@ public class Laura {
 				print("COULD NOT CREATE .laura DIRECTORY!");
 			}
 		}
+	}
+	
+	private void loadPreferences() {
+		print("Loading user preferences");
+		preferences = new Properties();
+		
+		// Try and load from a file
+		preferencesFile = new File(homeDir, "preferences.xml");
+		if (preferencesFile.isFile()) {
+			try {
+				preferences.loadFromXML(new FileInputStream(preferencesFile));
+			} catch (InvalidPropertiesFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void savePreferences() {
+		try {
+			preferencesFile.createNewFile();
+			preferences.storeToXML(new FileOutputStream(preferencesFile), null);
+			print("Preferences saved successfully.");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			print("ERROR: Failed to save preferences.");
+		}
+	}
+	
+	public Properties getPreferences() {
+		return this.preferences;
 	}
 	
 	private void loadPlugins()  {
@@ -154,6 +200,7 @@ public class Laura {
 
 	public void exit() {
 		print("Goodbye!");
+		savePreferences();
 		System.exit(0);
 	}
 

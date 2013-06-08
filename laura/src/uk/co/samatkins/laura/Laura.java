@@ -1,8 +1,10 @@
 package uk.co.samatkins.laura;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -12,16 +14,15 @@ import java.util.jar.JarFile;
 
 public class Laura {
 	
-	File homeDir;
+	private BufferedReader lineInput;
 	
-	ArrayList<Module> modules;
+	private File homeDir;
+	
+	private ArrayList<Module> modules;
 
 	public Laura() {
 		modules = new ArrayList<Module>();
-	}
-	
-	public void print(String output) {
-		System.out.println(output);
+		lineInput = new BufferedReader( new InputStreamReader(System.in) );
 	}
 	
 	public void start() {
@@ -34,7 +35,32 @@ public class Laura {
 	}
 	
 	public void mainLoop() {
-		
+		String[] input;
+		while (true) {
+			input = getInput().split(" ");
+			
+			// Try each module in turn
+			for (Module module: modules) {
+				if (module.matches(input)) {
+					module.execute(input);
+					break;
+				}
+			}
+		}
+	}
+	
+	public void print(String output) {
+		System.out.println(output);
+	}
+	
+	public String getInput() {
+		try {
+			return lineInput.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "";
+		}
 	}
 	
 	/**

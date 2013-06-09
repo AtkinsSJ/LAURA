@@ -171,9 +171,11 @@ public class Laura {
 							element.getName().replaceAll(".class", "").replaceAll("/", "."),
 							true, classLoader
 						);
-						Module m = (Module)c.newInstance();
-						m.init(this);
-						modules.add(m);
+						if (c.isAssignableFrom(Module.class)) {
+							Module m = (Module)c.newInstance();
+							m.init(this);
+							modules.add(m);
+						}
 					} catch (ClassNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

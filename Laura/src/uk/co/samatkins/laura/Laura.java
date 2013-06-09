@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
@@ -171,22 +172,15 @@ public class Laura {
 							element.getName().replaceAll(".class", "").replaceAll("/", "."),
 							true, classLoader
 						);
-						if (c.isAssignableFrom(Module.class)) {
-							Module m = (Module)c.newInstance();
-							m.init(this);
-							modules.add(m);
-						}
+						
+						Module m = (Module)c.newInstance();
+						m.init(this);
+						modules.add(m);
 					} catch (ClassNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					} catch (InstantiationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ClassCastException e) {
+					} catch (InstantiationException | ClassCastException | IllegalAccessException e) {
 						// Class isn't a module. No need to panic.
-					} catch (IllegalAccessException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
 					}
 				}
 			}

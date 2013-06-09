@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project Laura with Jar-in-Jar Loader">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="C:/Users/Sam/Documents/Java/LAURA/Words/Words.jar">
+            <manifest>
+<!--                 <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="uk.co.samatkins.laura.Main"/>  -->
+                <attribute name="Class-Path" value="."/>
+                <!-- <attribute name="Rsrc-Class-Path" value="./ jspf.core-1.0.2.jar"/> -->
+            </manifest>
+            <zipfileset src="jar-in-jar-loader.zip"/>
+            <fileset dir="C:/Users/Sam/Documents/Java/LAURA/Words/bin"/>
+            <zipfileset dir="C:\libraries\jspf-1.0.2.bin\dist" includes="jspf.core-1.0.2.jar"/>
+            <zipfileset dir="C:\libraries\wordnik-api\target" includes="wordnik-java-client-1.0.0.jar"/>
+        </jar>
+    </target>
+</project>

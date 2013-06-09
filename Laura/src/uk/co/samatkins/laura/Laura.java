@@ -148,11 +148,11 @@ public class Laura {
 		}
 		
 		// Iterate through .jar files
-		URLClassLoader classLoader;
+		JarFileLoader classLoader;
 		JarFile jarFile;
 		for (File plugin: pluginFiles) {
 			try {
-				classLoader = new URLClassLoader(new URL[]{plugin.toURI().toURL()});
+				classLoader = new JarFileLoader(new URL[]{plugin.toURI().toURL()});
 				jarFile = new JarFile(plugin);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
